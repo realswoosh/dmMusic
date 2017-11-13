@@ -47,24 +47,6 @@ namespace dmMusic
 
 		public MainWindow()
 		{
-			AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-			{
-
-				String resourceName = "AssemblyLoadingAndReflection." +			   new AssemblyName(args.Name).Name + ".dll";
-
-				using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-				{
-
-					Byte[] assemblyData = new Byte[stream.Length];
-
-					stream.Read(assemblyData, 0, assemblyData.Length);
-
-					return Assembly.Load(assemblyData);
-
-				}
-
-			};
-
 			InitializeComponent();
 
 			musicPlayer.PlaybackStopped += MusicPlayer_PlayerStopped;
@@ -123,7 +105,7 @@ namespace dmMusic
 		{
 			isTh = false;
 
-			musicPlayer.MouseDoubleClickStopReady();	// Stop Event를 삭제 한다. 함수명 정리가 필요함
+			musicPlayer.DisablePlaybackStopped();
 			musicPlayer.CleanupPlayback();
 
 			AppSetting appSetting = new AppSetting();
@@ -229,7 +211,7 @@ namespace dmMusic
 
 			selectIndex = listView.SelectedIndex;
 						
-			musicPlayer.MouseDoubleClickStopReady();
+			musicPlayer.DisablePlaybackStopped();
 			musicPlayer.Stop();
 
 			PlaySound(mItem);
@@ -298,6 +280,7 @@ namespace dmMusic
 			{
 				trackBar.Value = 0;
 				btnPlay.Background = btnDefaultBrush;
+				musicPlayer.DisablePlaybackStopped();
 				musicPlayer.CleanupPlayback();
 			}
 		}
@@ -314,10 +297,12 @@ namespace dmMusic
 
 			selectIndex = listView.SelectedIndex;
 			
-			musicPlayer.MouseDoubleClickStopReady();
+			musicPlayer.DisablePlaybackStopped();
 			musicPlayer.Stop();
 
 			PlaySound(mItem);
+
+			this.Focus();
 		}
 
 		private void Window_MouseWheel(object sender, MouseWheelEventArgs e)

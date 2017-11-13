@@ -110,7 +110,7 @@ namespace dmMusic
 				soundOut.Stop();
 		}
 
-		public void MouseDoubleClickStopReady()
+		public void DisablePlaybackStopped()
 		{
 			if (soundOut != null && PlaybackStopped != null)
 				soundOut.Stopped -= PlaybackStopped;
